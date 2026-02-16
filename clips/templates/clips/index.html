@@ -1,0 +1,72 @@
+{% extends "clips/layout.html" %}
+{% load static %}
+{% block title %}Gameplay — Feed{% endblock %}
+
+{% block content %}
+<!-- Weekly Top 10 -->
+{% if weekly_top %}
+<section class="weekly-top">
+    <h2>&#127942; Weekly Top 10</h2>
+    <div class="top-clips-list">
+        {% for clip in weekly_top %}
+        <a href="{% url 'clip_page' clip.id %}" class="top-clip-item" style="text-decoration:none; color:inherit;">
+            <div class="top-rank">#{{ forloop.counter }}</div>
+            <div class="top-clip-thumb">
+                <img src="{{ clip.video_file.url }}" alt="{{ clip.title }}" style="display:block;">
+            </div>
+            <div class="top-clip-info">
+                <div class="clip-title">{{ clip.title }}</div>
+                <div class="clip-meta">
+                    <span>{{ clip.author.username }}</span>
+                    <a href="{% url 'game' clip.game.slug %}" class="clip-game-tag" style="text-decoration: none;">{{ clip.game.name }}</a>
+                </div>
+                <div class="rating-info">
+                    <span class="rating-avg">{{ clip.avg|floatformat:1 }}&#9733;</span>
+                    <span class="rating-count">({{ clip.votes }} votes)</span>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Feed Controls -->
+<section>
+    <h2 class="section-title">&#127916; All Clips</h2>
+    <div class="feed-controls">
+        <select id="gameFilter" class="form-control" style="max-width:200px;">
+            <option value="">All Games</option>
+            {% for game in games %}
+            <option value="{{ game.slug }}">{{ game.name }}</option>
+            {% endfor %}
+        </select>
+        <button id="sortRecent" class="btn btn-sm active" data-sort="recent">Recent</button>
+        <button id="sortTop" class="btn btn-sm" data-sort="top">Top Rated</button>
+    </div>
+
+    <!-- Clips Grid (populated by JS) -->
+    <div id="clipsGrid" class="clips-grid"></div>
+
+    <!-- Loading indicator -->
+    <div id="loadingIndicator" class="loading" style="display:none;">
+        <div class="loading-spinner"></div>
+        <p>Loading clips...</p>
+    </div>
+
+    <!-- Empty state -->
+    <div id="emptyState" class="empty-state" style="display:none;">
+        <p>No clips found. Be the first to submit one!</p>
+        {% if user.is_authenticated %}
+        <a href="{% url 'submit' %}" class="btn btn-primary">Submit a Clip</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'clips/js/clips.js' %}"></script>
+<script>
+    initFeed();
+</script>
+{% endblock %}

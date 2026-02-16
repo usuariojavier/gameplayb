@@ -1,0 +1,37 @@
+{% extends "clips/layout.html" %}
+{% load static %}
+{% block title %}Edit Profile — Gameplay{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="page-header">
+        <h1>Edit Profile</h1>
+    </div>
+
+    <div class="card">
+        <div class="card-body" style="padding:1.5rem;">
+            <div class="form-group">
+                <label for="profileBio">Bio</label>
+                <textarea id="profileBio" class="form-control" placeholder="Tell us about yourself..." maxlength="300">{{ user.bio }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="profileAvatar">Avatar URL</label>
+                <input type="url" id="profileAvatar" class="form-control" placeholder="https://example.com/avatar.jpg" value="{{ user.avatar_url }}">
+            </div>
+
+            <div id="profileError" class="alert" style="display:none;"></div>
+            <div id="profileSuccess" style="display:none; color:var(--success); margin-bottom:1rem; font-size:0.9rem;">Profile updated!</div>
+
+            <button id="saveProfileBtn" class="btn btn-primary" style="width:100%;">Save Changes</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'clips/js/clips.js' %}"></script>
+<script>
+    initEditProfile();
+</script>
+{% endblock %}

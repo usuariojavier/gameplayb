@@ -1,0 +1,36 @@
+{% extends "clips/layout.html" %}
+{% load static %}
+{% block title %}{{ game.name }} — Gameplay{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ game.name }}</h1>
+    {% if game.description %}
+    <p>{{ game.description }}</p>
+    {% endif %}
+    <p style="color:var(--text-muted); font-size:0.85rem;">{{ game.clips.count }} clips</p>
+</div>
+
+<div class="feed-controls">
+    <button id="sortRecent" class="btn btn-sm active" data-sort="recent">Recent</button>
+    <button id="sortTop" class="btn btn-sm" data-sort="top">Top Rated</button>
+</div>
+
+<div id="clipsGrid" class="clips-grid"></div>
+<div id="loadingIndicator" class="loading" style="display:none;">
+    <div class="loading-spinner"></div>
+</div>
+<div id="emptyState" class="empty-state" style="display:none;">
+    <p>No clips for {{ game.name }} yet. Be the first!</p>
+    {% if user.is_authenticated %}
+    <a href="{% url 'submit' %}" class="btn btn-primary">Submit a Clip</a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'clips/js/clips.js' %}"></script>
+<script>
+    initFeed("{{ game.slug }}");
+</script>
+{% endblock %}

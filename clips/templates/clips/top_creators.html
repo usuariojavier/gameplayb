@@ -1,0 +1,38 @@
+{% extends "clips/layout.html" %}
+{% block title %}Top Creators — Gameplay{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>&#127942; Top Creators</h1>
+    <p>Creators ranked by the average rating of their clips.</p>
+</div>
+
+{% if creators %}
+<div class="creators-list">
+    {% for creator in creators %}
+    <div class="creator-card">
+        <div class="creator-rank">#{{ forloop.counter }}</div>
+        <div class="creator-avatar">
+            {% if creator.avatar_url %}
+            <img src="{{ creator.avatar_url }}" alt="{{ creator.username }}">
+            {% else %}
+            {{ creator.username|first|upper }}
+            {% endif %}
+        </div>
+        <div class="creator-info">
+            <h3><a href="{% url 'profile' creator.username %}">{{ creator.username }}</a></h3>
+            <div class="creator-stats">
+                <span style="color:var(--star-color);">{{ creator.avg_rating|floatformat:1 }} &#9733;</span> &middot;
+                {{ creator.total_clips }} clip{{ creator.total_clips|pluralize }} &middot;
+                {{ creator.total_ratings }} vote{{ creator.total_ratings|pluralize }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No creators with rated clips yet.</p>
+</div>
+{% endif %}
+{% endblock %}

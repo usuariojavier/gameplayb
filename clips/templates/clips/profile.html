@@ -1,0 +1,52 @@
+{% extends "clips/layout.html" %}
+{% load static %}
+{% block title %}{{ profile_user.username }} — Gameplay{% endblock %}
+
+{% block content %}
+<div class="profile-header">
+    <div class="profile-avatar">
+        {% if profile_user.avatar_url %}
+        <img src="{{ profile_user.avatar_url }}" alt="{{ profile_user.username }}">
+        {% else %}
+        {{ profile_user.username|first|upper }}
+        {% endif %}
+    </div>
+    <div class="profile-info">
+        <h1>{{ profile_user.username }}</h1>
+        {% if profile_user.bio %}
+        <p class="bio">{{ profile_user.bio }}</p>
+        {% endif %}
+        <div class="profile-stats">
+            <span><strong>{{ profile_user.clips.count }}</strong> clips</span>
+            <span>Joined <strong>{{ profile_user.date_joined|date:"M Y" }}</strong></span>
+        </div>
+        {% if user.is_authenticated and user != profile_user %}
+        <button class="btn btn-sm {% if is_bookmarked %}btn-primary{% else %}btn-secondary{% endif %}" id="bookmarkBtn" data-user-id="{{ profile_user.id }}" style="margin-top:0.75rem;">
+            {% if is_bookmarked %}&#9733; Bookmarked{% else %}&#9734; Bookmark Creator{% endif %}
+        </button>
+        {% endif %}
+        {% if user == profile_user %}
+        <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-secondary" style="margin-top:0.75rem;">Edit Profile</a>
+        {% endif %}
+    </div>
+</div>
+
+<h2 class="section-title">&#127916; {{ profile_user.username }}'s Clips</h2>
+<div id="clipsGrid" class="clips-grid"></div>
+<div id="loadingIndicator" class="loading" style="display:none;">
+    <div class="loading-spinner"></div>
+</div>
+<div id="emptyState" class="empty-state" style="display:none;">
+    <p>No clips yet.</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'clips/js/clips.js' %}"></script>
+<script>
+    initProfileFeed("{{ profile_user.username }}");
+    {% if user.is_authenticated and user != profile_user %}
+    initBookmarkCreator();
+    {% endif %}
+</script>
+{% endblock %}

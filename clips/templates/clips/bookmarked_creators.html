@@ -1,0 +1,36 @@
+{% extends "clips/layout.html" %}
+{% block title %}Bookmarked Creators — Gameplay{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>&#9734; Bookmarked Creators</h1>
+    <p>Quick access to your favorite content creators.</p>
+</div>
+
+{% if creators %}
+<div class="creators-list">
+    {% for creator in creators %}
+    <div class="creator-card">
+        <div class="creator-avatar">
+            {% if creator.avatar_url %}
+            <img src="{{ creator.avatar_url }}" alt="{{ creator.username }}">
+            {% else %}
+            {{ creator.username|first|upper }}
+            {% endif %}
+        </div>
+        <div class="creator-info">
+            <h3><a href="{% url 'profile' creator.username %}">{{ creator.username }}</a></h3>
+            <div class="creator-stats">
+                {{ creator.clips.count }} clip{{ creator.clips.count|pluralize }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>You haven't bookmarked any creators yet.</p>
+    <a href="{% url 'top_creators' %}" class="btn btn-primary">Discover Creators</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "clips/layout.html" %}
+{% block title %}Games — Gameplay{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Games</h1>
+    <p>Browse clips by game.</p>
+</div>
+
+{% if games %}
+<div class="games-grid">
+    {% for game in games %}
+    <a href="{% url 'game' game.slug %}" class="game-card" style="text-decoration:none; color:inherit;">
+        {% if game.cover_url %}
+        <img src="{{ game.cover_url }}" alt="{{ game.name }}" class="game-cover">
+        {% else %}
+        <div class="game-cover" style="display:flex; align-items:center; justify-content:center; font-size:2rem;">&#127918;</div>
+        {% endif %}
+        <h3>{{ game.name }}</h3>
+        <span class="game-clips-count">{{ game.num_clips }} clip{{ game.num_clips|pluralize }}</span>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>No games added yet.</p>
+</div>
+{% endif %}
+{% endblock %}

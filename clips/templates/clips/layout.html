@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gameplay{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'clips/css/styles.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'index' %}" class="nav-brand">
+                <span class="brand-icon">&#127918;</span> Gameplay
+            </a>
+
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="{% url 'index' %}" class="nav-link">Feed</a>
+                <a href="{% url 'games' %}" class="nav-link">Games</a>
+                <a href="{% url 'top_creators' %}" class="nav-link">Top Creators</a>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'submit' %}" class="nav-link nav-submit">+ Submit Clip</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-user-btn">
+                            {{ user.username }} &#9662;
+                        </button>
+                        <div class="nav-dropdown-content">
+                            <a href="{% url 'profile' user.username %}">My Profile</a>
+                            <a href="{% url 'favorites' %}">My Favorites</a>
+                            <a href="{% url 'bookmarked_creators' %}">Bookmarked Creators</a>
+                            <a href="{% url 'edit_profile' %}">Edit Profile</a>
+                            <hr>
+                            <a href="{% url 'logout' %}">Log Out</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link">Log In</a>
+                    <a href="{% url 'register' %}" class="nav-link nav-submit">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        {% if message %}
+        <div class="alert">{{ message }}</div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>Gameplay &mdash; Community-driven video curation platform for gaming clips.</p>
+    </footer>
+
+    <script>
+        // Mobile nav toggle
+        document.getElementById('navToggle').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

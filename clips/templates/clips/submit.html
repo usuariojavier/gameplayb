@@ -1,0 +1,61 @@
+
+<!-- clips/templates/clips/submit.html -->
+
+{% extends "clips/layout.html" %}
+{% load static %}
+{% block title %}Submit Clip — Gameplay{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="page-header">
+        <h1>Submit a Clip</h1>
+        <p>Share your best gameplay moment with the community.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-body" style="padding:1.5rem;">
+            
+            <form method="post" enctype="multipart/form-data" action="{% url 'submit' %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="clipTitle">Title</label>
+                    <input type="text" name="title" id="clipTitle" class="form-control" placeholder="Epic 360 no-scope on Dust2" maxlength="120" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="clipFile">Video File (Max 100MB)</label>
+                    <input type="file" name="video_file" id="clipFile" class="form-control" accept="video/*" required>
+                    <small style="color: #888;">Supported formats: mp4, mov, avi, webm.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="clipGame">Game</label>
+                    <select name="game" id="clipGame" class="form-control" required>
+                        <option value="">Select a game...</option>
+                        {% for game in games %}
+                        <option value="{{ game.id }}">{{ game.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="clipDesc">Description (optional)</label>
+                    <textarea name="description" id="clipDesc" class="form-control" placeholder="Tell us about this play..." maxlength="500"></textarea>
+                </div>
+
+                {% if error %}
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn btn-primary" style="width:100%;">
+                    Submit Clip
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

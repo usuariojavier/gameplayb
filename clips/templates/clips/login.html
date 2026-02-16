@@ -1,0 +1,30 @@
+{% extends "clips/layout.html" %}
+{% block title %}Log In — Gameplay{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="page-header">
+        <h1>Log In</h1>
+    </div>
+
+    <div class="card">
+        <div class="card-body" style="padding:1.5rem;">
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" class="form-control" autofocus required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Log In</button>
+            </form>
+            <p style="text-align:center; margin-top:1rem; color:var(--text-muted); font-size:0.9rem;">
+                Don't have an account? <a href="{% url 'register' %}">Register here</a>.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
